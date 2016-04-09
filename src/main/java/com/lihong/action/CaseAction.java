@@ -1,5 +1,6 @@
 package com.lihong.action;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
