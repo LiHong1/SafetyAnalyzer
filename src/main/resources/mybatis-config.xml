@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 设置类的别名，如果不设置，在使用类型的地方需要把包的路径也加上 , 注：别名设置要放在environments前面 -->
+    <typeAliases>
+        <typeAlias alias="User" type="com.lihong.bean.User"/>
+        <typeAlias alias="Keyword" type="com.lihong.bean.Keyword"/>
+        <typeAlias alias="MenuItem" type="com.lihong.bean.MenuItem"/>
+        <typeAlias alias="Case" type="com.lihong.bean.Case"/>
+        <typeAlias alias="MenuItemDto" type="com.lihong.dto.MenuItemDto"/>
+    </typeAliases>
+     
+   
+  <!--   <environments default="development">
+        <environment id="development">
+            使用jdbc事务管理，事务控制由mybatis
+            <transactionManager type="jdbc"></transactionManager>
+            mbatis默认数据库连接池，由mybatis管理
+            <dataSource type="pooled">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://10.161.155.109:3306/safetyanalyzer"/>
+                <property name="username" value="lihong"/>
+                <property name="password" value="921026"/>
+            </dataSource>
+        </environment>
+    </environments> -->
+ 
+    <!-- SQL映射文件 -->
+    <mappers>
+        <mapper resource="sqlmap/User.xml"/>
+        <mapper resource="sqlmap/MenuItem.xml"/>
+        <mapper resource="sqlmap/Case.xml"/>
+        <mapper resource="sqlmap/Keyword.xml"/>
+    </mappers>
+</configuration>

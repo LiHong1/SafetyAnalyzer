@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.CaseDao">
+  
+    <resultMap type="Case" id="case">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="keywords" property="keywords" jdbcType="VARCHAR"/> 
+        <result column="type" property="type" jdbcType="CHAR"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="title" property="title" jdbcType="BOOLEAN"/>     
+    </resultMap>
+     
+    <select id="getAll" resultMap="case">
+        select * from cases;
+    </select>
+    
+     <select id="getCase" parameterType="java.lang.Long" resultMap="case">
+        <![CDATA[SELECT * FROM cases
+			WHERE id=#{id,jdbcType=VARCHAR} or id in (
+			select max(id) from cases where id<#{id,jdbcType=VARCHAR}
+			union select min(id) from cases where id>#{id,jdbcType=VARCHAR}) order by id
+		]]> 
+    </select>
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from cases;
+    </select>
+    
+    <select id="getById" parameterType="INTEGER" resultMap="case">
+        select * from cases where id = #{id, jdbcType=INTEGER} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="case" useGeneratedKeys="true" keyProperty="id">
+        insert into cases(name, url) values(#{name, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR});
+    </insert>
+     
+    <update id="update" parameterType="case">
+        update cases
+        <set>
+            <if test="keywords != null">
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+             
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+             <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+             <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER};
+    </update>
+     
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from cases where id = #{id, jdbcType=Long};
+    </delete>
+    
+    <select id="getPage" parameterType="java.util.ArrayList" resultMap="case">
+        select * from cases limit 
+        <foreach item="item" index="index" collection="list"  separator=","> #{item} </foreach> ;
+    </select> 
+    
+</mapper>

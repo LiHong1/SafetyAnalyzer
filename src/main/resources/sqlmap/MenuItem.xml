@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.MenuItemDao">
+  
+
+     <resultMap type="MenuItemDto" id="menuItemDto">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/> 
+        <result column="type" property="url" jdbcType="CHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="visiable" property="url" jdbcType="BOOLEAN"/>     
+        <result column="order" property="order" jdbcType="INTEGER"/>
+        <result column="parent_id" property="pId" jdbcType="INTEGER"/>
+        <result column="authority" property="url" jdbcType="VARCHAR"/> 
+    </resultMap>
+     
+    <select id="getAll" resultMap="menuItemDto">
+        select * from MenuItem where parent_id is null;
+    </select>
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from MenuItem;
+    </select>
+    
+    <select id="getChildren" parameterType="java.lang.Long" resultMap="menuItemDto">
+        select * from MenuItem where parent_id = #{parentId, jdbcType=BIGINT};
+    </select>
+    
+     <select id="getSiblingMenu" parameterType="java.lang.String" resultMap="menuItemDto">
+        select * from MenuItem where parent_id in (select parent_id from MenuItem where url=#{url, jdbcType=CHAR});
+    </select>
+    
+    <select id="getById" parameterType="INTEGER" resultMap="menuItemDto">
+        select * from MenuItem where id = #{id, jdbcType=INTEGER} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="menuItem" useGeneratedKeys="true" keyProperty="id">
+        insert into MenuItem(name, url) values(#{name, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR});
+    </insert>
+     
+    <update id="update" parameterType="menuItem">
+        update MenuItem
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+             
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER};
+    </update>
+     
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from MenuItem where id = #{id, jdbcType=Long};
+    </delete>
+    
+    <select id="getPage" parameterType="java.util.ArrayList" resultMap="menuItemDto">
+        select * from MenuItem limit 
+        <foreach item="item" index="index" collection="list"  separator=","> #{item} </foreach> ;
+    </select> 
+    
+</mapper>

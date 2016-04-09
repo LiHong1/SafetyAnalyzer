@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.UserDao">
+    <!-- type映射的类名，id后面设置resultMap时用到，表示结果对应哪个类型的映射关系 -->
+    <!-- 注：如果表中列名与类的属性名一致，且类按javaBean规范构造，映射关系可省略，具体原因可参考java的反射原理 -->
+    <resultMap type="User" id="user">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+    </resultMap>
+     
+    <select id="getAll" resultMap="user">
+        select * from User;
+    </select>
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from User;
+    </select> 
+    
+    <select id="getByName" parameterType="java.lang.String" resultMap="user">
+        select * from User where username = #{username, jdbcType=VARCHAR} limit 0, 1;
+    </select>
+    
+    <select id="getById" parameterType="java.lang.Long" resultMap="user">
+        select * from User where id = #{id, jdbcType=BIGINT} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        insert into User(username, password) values(#{username, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR});
+        <!-- 第二种返回主键的方式 -->
+        <!--
+        <selectKey resultType="long" order="AFTER" keyProperty="id" > 
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        -->
+    </insert>
+     
+    <update id="update" parameterType="User">
+        update User
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+             
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER};
+    </update>
+     
+    <delete id="delete" parameterType="int">
+        delete from User where id = #{id, jdbcType=INTEGER};
+    </delete>
+</mapper>
