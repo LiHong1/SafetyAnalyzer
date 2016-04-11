@@ -11,6 +11,8 @@ import java.util.Map;
 
 //import net.paoding.analysis.analyzer.PaodingAnalyzer;
 
+
+import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
@@ -37,11 +39,14 @@ import org.apache.lucene.util.Version;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import com.lihong.bean.Case;
+import com.lihong.servlet.InitKeywordServlet;
 
 
 
 
 public class LuceneIKUtil {
+    
+    private static Logger log = Logger.getLogger(LuceneIKUtil.class); 
     
     private static Directory directory ;
     private static Analyzer analyzer ;
@@ -179,7 +184,7 @@ public class LuceneIKUtil {
             TopDocs topDocs = indexSearcher.search(query, 4);
             //信息展示
             int totalCount = topDocs.totalHits;
-            System.out.println("共检索出 "+totalCount+" 条记录");
+            log.info("共检索出 "+totalCount+" 条记录");
             
             
             //高亮显示
@@ -248,7 +253,7 @@ public class LuceneIKUtil {
         return result;
     }
    
-    public static Case search(Map<String,Integer> map) throws IOException{
+    public static Case search(Map<String,Integer> map){
     	 StringBuffer keyword = new StringBuffer();
 	     for(String s:map.keySet())
 	    	 keyword.append(s);
@@ -263,12 +268,20 @@ public class LuceneIKUtil {
          
          //查询测试
          String [] fields = {"content"};
-         List<Case> list = LuceneIKUtil.search(fields,keyword.toString());
-         for(int i=0; i<list.size(); i++){
-             Case c = list.get(i);
-             System.out.println("("+c.getId()+")" +c.getKeyWords());
-         }
-         return evaluate(list,map);
+         List<Case> list;
+        try {
+            list = LuceneIKUtil.search(fields,keyword.toString());
+            for(int i=0; i<list.size(); i++){
+                Case c = list.get(i);
+                log.info("("+c.getId()+")" +c.getKeyWords());
+            }
+            return evaluate(list,map);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+       
          //删除测试
          //luenceProcess.delete(1);
     }
@@ -292,9 +305,6 @@ public class LuceneIKUtil {
     			 for(Integer key :cases.keySet())
     		    	 if(key > count)
     		    		 count = key;
-    			 
-    			 System.out.println(count);
-    			 System.out.println(cases.get(count));
     			 return cases.get(count);
     		}
     	}

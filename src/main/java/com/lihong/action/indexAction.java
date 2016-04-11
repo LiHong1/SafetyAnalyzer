@@ -16,7 +16,7 @@ public class indexAction extends BaseAction{
 	private MenuItemService menuItemService;
 	@RequestMapping(value="/index",method = RequestMethod.GET)
 	public String index(Model model,HttpServletRequest request){
-		model.addAttribute("menuItems",menuItemService.getAll());
+		model.addAttribute("menuItems",menuItemService.getAll()); 
 		model.addAttribute(CONTEXT_PATH, request.getRequestURI());
 		return "index";
 	}

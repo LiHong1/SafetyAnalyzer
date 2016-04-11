@@ -6,7 +6,7 @@ import com.lihong.common.bean.SafeAnError;
 import com.lihong.dao.UserDao;
 import com.lihong.service.UserService;
 
-public class UserServiceImpl extends BaseServiceImpl implements UserService{
+public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
 
 	public Object getUser(String username, String password) {
 		User user = ((UserDao) baseDao).getUser(username);
@@ -17,6 +17,10 @@ public class UserServiceImpl extends BaseServiceImpl implements UserService{
 		}
 		return new SafeAnError(1, "用户名不存在");
 	}
+
+    public User getUser(String username) {
+        return ((UserDao) baseDao).getUser(username);
+    }
 
 
 }

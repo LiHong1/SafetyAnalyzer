@@ -7,8 +7,10 @@ import com.lihong.bean.User;
  * @author lihong2-ext
  *
  */
-public interface UserService extends BaseService{
+public interface UserService extends BaseService<User>{
    
 	Object getUser(String username, String password);
+	
+	User getUser(String username);
 	
 }

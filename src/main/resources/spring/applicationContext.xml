@@ -61,6 +61,40 @@
 		
 	</bean> -->
 	
+	<bean id="nettyServerHandler" class="com.lihong.netty.NettyServerHandler"></bean>
+	<bean class="com.lihong.netty.NettyServer">
+	 		<property name="port" value="9999"></property>
+	 		<property name="channelHandler" ref="nettyServerHandler"></property>
+	</bean> 
+	
+	<!-- 更新案例索引的定时任务  -->
+	<bean id="updateCaseIndexJob" class="com.lihong.web.service.quartz.UpdateCaseIndexJob">
+	    <property name="caseService" ref="caseService"></property>
+	</bean>  
+	
+	<bean id="updateCaseIndexJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="updateCaseIndexJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+    </bean>
+	
+	<!-- 定时任务  -->
+	<bean id="updateCaseIndexTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="updateCaseIndexJobDetail"/>  
+          <property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点触发一次 --> 
+       <!-- <property name="cronExpression" value="*/59 * * * * ?"/> --><!-- 每隔60秒钟触发一次 -->  
+    </bean> 
+      
+   
 
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	       <property name="triggers">  
+	           <list>  
+	              <ref bean="updateCaseIndexTrigger"/>  
+	           </list>  
+	       </property>  
+	       <property name="autoStartup" value="true"/>  
+	</bean>  
 
 </beans>

@@ -1,6 +1,5 @@
 package com.lihong.action;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +25,7 @@ public class CaseAction{
 	@RequestMapping(value="/case/{id}",method = RequestMethod.GET)
 	public String index(@PathVariable Long id,Model model){
         List<Case> cs = caseService.getCase(id);
-		model.addAttribute("cases",cs);
+		model.addAttribute("cases",cs); 
 		return "case/caseShow";
 	}
 

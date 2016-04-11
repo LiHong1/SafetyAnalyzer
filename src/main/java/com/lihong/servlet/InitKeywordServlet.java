@@ -11,20 +11,31 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.lihong.bean.AllKeywords;
 import com.lihong.bean.Keyword;
+import com.lihong.netty.NettyServer;
 import com.lihong.service.KeywordService;
 
 public class InitKeywordServlet extends HttpServlet {
 	private KeywordService keywordService;
+	private NettyServer nettyServer;
 	
 	public void init() throws ServletException {
 		Logger log = Logger.getLogger(InitKeywordServlet.class);  
-		ApplicationContext app = new  ClassPathXmlApplicationContext("spring/applicationContext.xml");
+		ApplicationContext app = new  ClassPathXmlApplicationContext("classpath:spring/applicationContext.xml");
 		keywordService = app.getBean(KeywordService.class);
-		List<Keyword> keywords = keywordService.getAll();
-		AllKeywords allKeywords = new AllKeywords();
-		allKeywords.setKeywords(keywords);
-		allKeywords.setAllKeyword();
-		log.info("init Keywords");
+		if (keywordService == null){
+		    log.error("keywords init failure....");
+		}else{
+		    List<Keyword> keywords = keywordService.getAll();
+	        AllKeywords.init(keywordService.getAll());
+	        log.info("init Keywords Success.............");
+		}
+		
+		nettyServer = app.getBean(NettyServer.class);
+		if (nettyServer == null){
+		    log.error("nettyServer start failure....");
+		}else{
+		    nettyServer.start();
+        }
 		
 		
 	}
