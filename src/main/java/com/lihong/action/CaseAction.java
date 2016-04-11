@@ -39,4 +39,9 @@ public class CaseAction{
        PageBean<Case> pageBean = caseService.getPage(page, rows);
 		return pageBean;
 	}
+	
+	@RequestMapping(value="/manage/case/add",method = RequestMethod.GET)
+    public String addCase(){
+        return "case/caseAddUI";
+    }
 }

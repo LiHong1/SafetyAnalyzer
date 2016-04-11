@@ -1,5 +1,6 @@
 package com.lihong.action;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +16,11 @@ public class indexAction extends BaseAction{
 	@Autowired
 	private MenuItemService menuItemService;
 	@RequestMapping(value="/index",method = RequestMethod.GET)
-	public String index(Model model,HttpServletRequest request){
+	public String index(Model model,HttpServletRequest request,ServletContext servletContext){
 		model.addAttribute("menuItems",menuItemService.getAll()); 
-		model.addAttribute(CONTEXT_PATH, request.getRequestURI());
+		/*request.get
+		model.addAttribute(CONTEXT_PATH, request.getRequestURI());*/
+		System.out.println(servletContext);
 		return "index";
 	}
 	

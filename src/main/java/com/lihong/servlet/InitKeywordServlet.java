@@ -34,7 +34,7 @@ public class InitKeywordServlet extends HttpServlet {
 		if (nettyServer == null){
 		    log.error("nettyServer start failure....");
 		}else{
-		    nettyServer.start();
+		   // nettyServer.start();
         }
 		
 		
