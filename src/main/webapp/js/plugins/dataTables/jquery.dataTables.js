@@ -2904,7 +2904,6 @@
 			out   = total ?
 				lang.sInfo :
 				lang.sInfoEmpty;
-	
 		if ( total !== max ) {
 			/* Record set after filtering */
 			out += ' ' + lang.sInfoFiltered;

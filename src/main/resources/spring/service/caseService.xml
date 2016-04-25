@@ -5,6 +5,8 @@
 
 	<bean id="caseService" class="com.lihong.service.impl.CaseServiceImpl">
 		 <property name="baseDao" ref="caseDao"/>
+		 <property name="dictionaryDao" ref="dictionaryDao"/>
+		 <property name="caseIndexDao" ref="caseIndexDao"/>
 	</bean>
 	
 </beans>

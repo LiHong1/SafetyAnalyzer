@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.DictionaryDao">
+  
+    <resultMap type="Dictionary" id="Dictionary">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="CHAR"/>
+        <result column="value" property="value" jdbcType="CHAR"/>
+    </resultMap>
+     
+    <select id="getAll" resultMap="Dictionary">
+        select * from Dictionary;
+    </select>
+    
+     <select id="getByName" parameterType="java.lang.String" resultMap="Dictionary">
+        <![CDATA[SELECT * FROM Dictionary
+			WHERE name=#{id,jdbcType=VARCHAR};
+		]]> 
+    </select>
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from Dictionary;
+    </select>
+    
+    <select id="getById" parameterType="INTEGER" resultMap="Dictionary">
+        select * from dictionary where id = #{id, jdbcType=INTEGER} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="Dictionary" useGeneratedKeys="true" keyProperty="id">
+        insert into Dictionarys(name, url) values(#{name, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR});
+    </insert>
+     
+    <update id="update" parameterType="Dictionary">
+        update Dictionarys
+        <set>
+            <if test="keywords != null">
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+             
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+             <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+             <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER};
+    </update>
+     
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from Dictionary where id = #{id, jdbcType=Long};
+    </delete>
+    
+    <select id="getPage" parameterType="java.util.ArrayList" resultMap="Dictionary">
+        select * from Dictionary limit 
+        <foreach item="item" index="index" collection="list"  separator=","> #{item} </foreach> ;
+    </select> 
+    
+</mapper>

@@ -7,6 +7,8 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="username" property="username" jdbcType="VARCHAR"/>
         <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
     </resultMap>
      
     <select id="getAll" resultMap="user">
@@ -18,7 +20,7 @@
     </select> 
     
     <select id="getByName" parameterType="java.lang.String" resultMap="user">
-        select * from User where username = #{username, jdbcType=VARCHAR} limit 0, 1;
+        select * from User where username = #{username, jdbcType=VARCHAR} or phone = #{username, jdbcType=VARCHAR}  limit 0, 1;
     </select>
     
     <select id="getById" parameterType="java.lang.Long" resultMap="user">
@@ -27,7 +29,7 @@
      
     <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
     <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="id">
-        insert into User(username, password) values(#{username, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR});
+        insert into User(username, password,phone,type) values(#{username, jdbcType=VARCHAR}, #{password, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{type, jdbcType=INTEGER});
         <!-- 第二种返回主键的方式 -->
         <!--
         <selectKey resultType="long" order="AFTER" keyProperty="id" > 
@@ -53,4 +55,32 @@
     <delete id="delete" parameterType="int">
         delete from User where id = #{id, jdbcType=INTEGER};
     </delete>
+    
+       
+    <select id="getCountByParam" parameterType="com.lihong.dto.UserPageBeanDto" resultType="java.lang.Long">
+        select count(1) from user 
+        <where>  
+        <if test="createdDateBegin != null and createdDateBegin != '' ">  
+            and DATE_FORMAT(createdDate,'%Y-%m-%d') >= DATE_FORMAT(#{createdDateBegin} ,'%Y-%m-%d')    
+        </if> 
+        <if test="createdDateEnd != null and createdDateEnd != '' ">  
+            and DATE_FORMAT(createdDate,'%Y-%m-%d') <![CDATA[ <= ]]> DATE_FORMAT(#{createdDateEnd},'%Y-%m-%d')    
+        </if>   
+         
+        </where>  
+    </select>
+    
+    <select id="getPageByParam" parameterType="com.lihong.dto.UserPageBeanDto" resultType="user">
+        select id,username,phone,type from user 
+        <where>  
+        <if test="createdDateBegin != null and createdDateBegin != '' ">  
+            and DATE_FORMAT(createdDate,'%Y-%m-%d') >= DATE_FORMAT(#{createdDateBegin} ,'%Y-%m-%d')    
+        </if> 
+        <if test="createdDateEnd != null and createdDateEnd != '' ">  
+            and DATE_FORMAT(createdDate,'%Y-%m-%d') <![CDATA[ <= ]]> DATE_FORMAT(#{createdDateEnd},'%Y-%m-%d')    
+        </if>   
+        </where> 
+           order by id desc limit #{ beginPosition, jdbcType=INTEGER} ,#{endPosition, jdbcType=INTEGER}
+    </select>
+    
 </mapper>

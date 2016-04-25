@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,23 +8,23 @@
     <meta name="keywords" content="安全分析，防诈骗">
     <meta name="description" content="">
 
-    <link href="../css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
-    <link href="../font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="${basePath}/css/bootstrap.min.css?v=3.4.0" rel="stylesheet">
+    <link href="${basePath}/font-awesome/css/font-awesome.css" rel="stylesheet">
 
     <!-- Morris -->
-    <link href="../css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="${basePath}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
 
     <!-- Gritter -->
-    <link href="../js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
+    <link href="${basePath}/js/plugins/gritter/jquery.gritter.css" rel="stylesheet">
 
-    <link href="../css/animate.css" rel="stylesheet">
-    <link href="../css/style.css?v=2.2.0" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../css/easyui.css">
-	<link rel="stylesheet" type="text/css" href="../css/plugins/easyUI/icon.css">
-	<link rel="stylesheet" type="text/css" href="../css/demo/demo.css">
-	<link href="../css/base.css" rel="stylesheet">
-	<script type="text/javascript" 　 src="../js/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+    <link href="${basePath}/css/animate.css" rel="stylesheet">
+    <link href="${basePath}/css/style.css?v=2.2.0" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${basePath}/css/easyui.css">
+	<link rel="stylesheet" type="text/css" href="${basePath}/css/plugins/easyUI/icon.css">
+	<link rel="stylesheet" type="text/css" href="${basePath}/css/plugins/dataTables/dataTables.bootstrap.css">
+	<link href="${basePath}/css/base.css" rel="stylesheet">
+	<script type="text/javascript" 　 src="${basePath}/js/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="${basePath}/js/jquery.easyui.min.js"></script>
  　　
 </head>
 
@@ -36,13 +35,15 @@
                 <ul class="nav" id="side-menu">
                     <li class="nav-header first">
 
-                        <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="../img/profile_small.jpg" />
+                        <div class="dropdown profile-element"> 
+                            <span>
+                              <img alt="image" class="img-circle" src="${basePath}/img/profile_small.jpg" />
                              </span>
                             <a data-toggle="dropdown" class="dropdown-toggle" href="index.html#">
                                 <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">${user.username}</strong>
                              </span> <span class="text-muted text-xs block">超级管理员 <b class="caret"></b></span> </span>
                             </a>
+                            <input type="hidden" id="userId" value="${user.id}">
                             <ul class="dropdown-menu animated fadeInRight m-t-xs">
                                 <li><a href="form_avatar.html">修改头像</a>
                                 </li>
@@ -53,7 +54,7 @@
                                 <li><a href="mailbox.html">信箱</a>
                                 </li>
                                 <li class="divider"></li>
-                                <li><a href="/logout">安全退出</a>
+                                <li><a href="${basePath}/logout">安全退出</a>
                                 </li>
                             </ul>
                         </div>
@@ -90,7 +91,7 @@
                                 <li>
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="../img/a7.jpg">
+                                            <img alt="image" class="img-circle" src="${basePath}/img/a7.jpg">
                                         </a>
                                         <div class="media-body">
                                             <small class="pull-right">46小时前</small>
@@ -104,7 +105,7 @@
                                 <li>
                                     <div class="dropdown-messages-box">
                                         <a href="profile.html" class="pull-left">
-                                            <img alt="image" class="img-circle" src="../img/a4.jpg">
+                                            <img alt="image" class="img-circle" src="${basePath}/img/a4.jpg">
                                         </a>
                                         <div class="media-body ">
                                             <small class="pull-right text-navy">25小时前</small>
@@ -158,7 +159,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="/logout">
+                            <a href="${basePath}/logout">
                                 <i class="fa fa-sign-out"></i> 退出
                             </a>
                         </li>
@@ -166,5 +167,5 @@
 
                 </nav>
             </div>
-            <div class="row  border-bottom white-bg dashboard-header">
+            
    

@@ -13,9 +13,26 @@
 		http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
 
+    <!-- 加载配置文件 -->
+    <context:property-placeholder location="classpath*:*.properties" />
 
-	<!-- 加载配置文件 -->
-	<context:property-placeholder location="classpath:db.properties" />
+ <!--    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehcache"></property>
+    </bean>
+ -->
+ <!--    <bean id="ehcacheFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"></property>
+    </bean>  -->
+
+
+
+    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName"   value="${redis.ip}" />
+        <property name="port"       value="${redis.port}" />
+        <property name="poolConfig" ref="jedisPoolConfig" />
+        <!-- <property name="shardInfo"  ref="jedisShardInfo1"></property> -->
+    </bean>
+    <!--redis配置结束-->
 
 	<!-- 数据源，使用dbcp -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -36,65 +53,44 @@
 		<!-- 数据源 -->
 		<property name="dataSource" ref="dataSource" /> 
 	</bean>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 数据源 -->
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+	<tx:annotation-driven transaction-manager="transactionManager"  />
+        <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+           <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+   
+    <aop:config>
+         <aop:pointcut expression="execution(* com.lihong.service.*.*(..))"
+            id="txPointcut"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/>                 
+    <!-- <aop:aspect id="b" ref="log">  
+          
+           <aop:before method="log" pointcut-ref="txPointcut" />
+            <aop:after method="logArg" pointcut-ref="txPointcut"/> 
+            <aop:after-throwing method="failure" pointcut-ref="txPointcut"/>
+             <aop:after-returning method="logArgAndReturn" returning="returnObj" pointcut-ref="txPointcut"/> 
+        </aop:aspect>  -->
+            
+    </aop:config>
 	
+	<import resource="classpath:spring/spring-netty.xml"/>
+    <import resource="classpath:spring/spring-quartz1.xml"/>
+    <import resource="classpath:spring/spring-redis.xml"/>
+    <import resource="classpath:spring/spring-validator.xml"/>
+    
 	<import resource="classpath:spring/dao/*"/>
 	<import resource="classpath:spring/service/*"/>
 	<import resource="classpath:spring/action/*"/>
-	<!-- mapper配置 
-	MapperFactoryBean：根据mapper接口生成代理对象
-	-->
-	<!-- <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
-		mapperInterface指定mapper接口
-		<property name="mapperInterface" value="cn.itcast.ssm.mapper.UserMapper"/>
-		<property name="sqlSessionFactory" ref="sqlSessionFactory"/>
-	</bean> -->
-	<!-- mapper批量扫描，从mapper包中扫描出mapper接口，自动创建代理对象并且在spring容器中注册 
-	遵循规范：将mapper.java和mapper.xml映射文件名称保持一致，且在一个目录 中
-	自动扫描出来的mapper的bean的id为mapper类名（首字母小写）
-	-->
-<!-- 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		指定扫描的包名 
-		如果扫描多个包，每个包中间使用半角逗号分隔
-		
-		<property name="basePackage" value="cn.itcast.ssm.mapper"/>
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
-		
-	</bean> -->
-	
-	<bean id="nettyServerHandler" class="com.lihong.netty.NettyServerHandler"></bean>
-	<bean class="com.lihong.netty.NettyServer">
-	 		<property name="port" value="9999"></property>
-	 		<property name="channelHandler" ref="nettyServerHandler"></property>
-	</bean> 
-	
-	<!-- 更新案例索引的定时任务  -->
-	<bean id="updateCaseIndexJob" class="com.lihong.web.service.quartz.UpdateCaseIndexJob">
-	    <property name="caseService" ref="caseService"></property>
-	</bean>  
-	
-	<bean id="updateCaseIndexJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
-        <property name="targetObject" ref="updateCaseIndexJob"/>  
-        <property name="targetMethod" value="execute"/>  
-        <property name="concurrent" value="false"/>
-        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
-    </bean>
-	
-	<!-- 定时任务  -->
-	<bean id="updateCaseIndexTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
-       <property name="jobDetail" ref="updateCaseIndexJobDetail"/>  
-          <property name="cronExpression" value="0 0 0 * * ?"/><!-- 每天零点触发一次 --> 
-       <!-- <property name="cronExpression" value="*/59 * * * * ?"/> --><!-- 每隔60秒钟触发一次 -->  
-    </bean> 
-      
-   
 
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
-	       <property name="triggers">  
-	           <list>  
-	              <ref bean="updateCaseIndexTrigger"/>  
-	           </list>  
-	       </property>  
-	       <property name="autoStartup" value="true"/>  
-	</bean>  
+	
 
+
+	<bean class="com.lihong.common.util.JedisUtil"></bean>  
+	
 </beans>

@@ -7,11 +7,13 @@
         <result column="keywords" property="keywords" jdbcType="VARCHAR"/> 
         <result column="type" property="type" jdbcType="CHAR"/>
         <result column="content" property="content" jdbcType="VARCHAR"/>
-        <result column="title" property="title" jdbcType="BOOLEAN"/>     
+        <result column="title" property="title" jdbcType="VARCHAR"/>   
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>   
+        <result column="updatedDate" property="updatedDate" jdbcType="TIMESTAMP"/>     
     </resultMap>
      
     <select id="getAll" resultMap="case">
-        select * from cases;
+        select * from cases
     </select>
     
      <select id="getCase" parameterType="java.lang.Long" resultMap="case">
@@ -23,7 +25,47 @@
     </select>
      
     <select id="getAllCount" resultType="java.lang.Long">
-        select count(*) from cases;
+        select count(*) from cases
+    </select>
+    
+     
+    <select id="getCountByParam" parameterType="com.lihong.dto.CasePageBeanDto" resultType="java.lang.Long">
+        select count(*) from cases 
+        <where>  
+        <if test="id!=null and id!='' ">  
+            id = #{id, jdbcType=INTEGER}   
+        </if>  
+        <if test="title!= null and title!= '' ">  
+            and title = #{title, jdbcType=VARCHAR}     
+        </if>  
+         
+        </where>  
+    </select>
+    
+    <select id="getPageByParam" parameterType="com.lihong.dto.CasePageBeanDto" resultType="case">
+        <bind name="pattern" value="'%' + keywords + '%'" />
+        select id,type,title,createdDate,updatedDate from cases 
+        <where>  
+        <if test="id!=null and id!='' ">  
+            id = #{id, jdbcType=INTEGER}   
+        </if>  
+        <if test="title!= null and title!= '' ">  
+            and title = #{title, jdbcType=VARCHAR}     
+        </if> 
+         <!-- <if test="keywords!= null and keywords!= '' ">  
+            and keywords like CONCAT('%','${keywords}','%' )      
+        </if>  --> 
+        <if test="keywords!= null and keywords!= '' ">  
+            and keywords like #{pattern}     
+        </if>
+        <if test="createdDate!= null and createdDate!= '' ">  
+            and DATE_FORMAT(createdDate,'%Y-%m-%d') = DATE_FORMAT(#{createdDate} ,'%Y-%m-%d')    
+        </if> 
+        <if test="updatedDate!= null and updatedDate!= '' ">  
+            and DATE_FORMAT(updatedDate,'%Y-%m-%d') = DATE_FORMAT(#{updatedDate},'%Y-%m-%d')    
+        </if>  
+        </where> 
+           order by id desc limit #{ beginPosition, jdbcType=INTEGER} ,#{endPosition, jdbcType=INTEGER}
     </select>
     
     <select id="getById" parameterType="INTEGER" resultMap="case">
@@ -32,8 +74,9 @@
      
     <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
     <insert id="add" parameterType="case" useGeneratedKeys="true" keyProperty="id">
-        insert into cases(name, url) values(#{name, jdbcType=VARCHAR}, #{url, jdbcType=VARCHAR});
+        <![CDATA[insert into cases(title,content,type,createdDate,updatedDate) values(#{title, jdbcType=VARCHAR}, #{content, jdbcType=VARCHAR},#{type, jdbcType=INTEGER},#{createdDate, jdbcType=TIMESTAMP},#{updatedDate, jdbcType=TIMESTAMP});]]>
     </insert>
+    
      
     <update id="update" parameterType="case">
         update cases
@@ -56,12 +99,14 @@
     </update>
      
     <delete id="delete" parameterType="java.lang.Long">
-        delete from cases where id = #{id, jdbcType=Long};
+        delete from cases where id = #{id, jdbcType=INTEGER};
     </delete>
     
     <select id="getPage" parameterType="java.util.ArrayList" resultMap="case">
-        select * from cases limit 
+        select id,type,keywords,title,createdDate,updatedDate from cases    order by id desc limit 
         <foreach item="item" index="index" collection="list"  separator=","> #{item} </foreach> ;
     </select> 
+    
+ 
     
 </mapper>

@@ -1,5 +1,7 @@
 package com.lihong.bean;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 /**
  *
  * 
@@ -9,9 +11,14 @@ package com.lihong.bean;
 public class Case extends DomainObject{
 
 
-	public String keywords;
-	public String content;
-	public String title;
+	private String keywords;
+	@NotNull(message="{javax.validation.constraints.NotNull.message}")  
+    @Size(max=20,message="{maxlength}") 
+	private String content;
+	@NotNull(message="{javax.validation.constraints.NotNull.message}") 
+	private String title;
+	@NotNull(message="{javax.validation.constraints.NotNull.message}") 
+	private Integer type;
 	
 	public String getKeyWords() {
 		return keywords;
@@ -43,7 +50,23 @@ public class Case extends DomainObject{
 		this.content = content;
 		this.title = title;
 	}
-	public Case(){
+	
+	public Case(String title, String content, Integer type) {
+        super();
+        this.title = title;
+        this.content = content;
+        this.type = type;
+    }
+	
+	public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Case(){
 		
 	}
 

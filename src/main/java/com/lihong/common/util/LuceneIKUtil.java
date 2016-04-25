@@ -223,16 +223,16 @@ public class LuceneIKUtil {
                 String content = document.get("content");
                 float score = scDoc.score; //相似度
                 String lighterTitle = highlighter.getBestFragment(analyzer, "title", title);
-                if(null==lighterTitle){
+                if(null == lighterTitle){
                     lighterTitle = title;
                 }
                 
                 String lighterKeywords = highlighter.getBestFragment(analyzer, "keywords", keywords);
-                if(null==lighterKeywords){
+                if(null == lighterKeywords){
                     lighterKeywords = keywords;
                 }
                 String lighterContent = highlighter.getBestFragment(analyzer, "content", content);
-                if(null==lighterContent){
+                if(null == lighterContent){
                 	lighterContent = content;
                 }
                 
@@ -310,6 +310,6 @@ public class LuceneIKUtil {
     	}
     	
    
-    	 return null;
+    	 return list.get(0);
     }
 }

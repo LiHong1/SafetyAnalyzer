@@ -35,6 +35,16 @@
 .h_1{
 	height:40px;
 }
+.h_2{
+    height:80px;
+}
+.h_3{
+    height:100px;
+}
+
+.h_500{
+    height:500px;
+}
 .left{
 	float:left;
 }
@@ -44,12 +54,18 @@
 .pad_btm_1{
 	padding-top: 30px;
 }
+.pad_top_1{
+    padding-top: 30px;
+}
 .margin_top_{
 	margin-top:10px;
 }
 #case{
 	 color:black;
 	 font-size: 12px;
+}
+.f-s-2{
+	font-size:14px;
 }
 #case_title{
 	 height:40px;

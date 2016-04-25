@@ -7,7 +7,7 @@
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="url" property="url" jdbcType="VARCHAR"/> 
-        <result column="type" property="url" jdbcType="CHAR"/>
+        <result column="type" property="type" jdbcType="CHAR"/>
         <result column="icon" property="icon" jdbcType="VARCHAR"/>
         <result column="visiable" property="url" jdbcType="BOOLEAN"/>     
         <result column="order" property="order" jdbcType="INTEGER"/>
@@ -16,7 +16,7 @@
     </resultMap>
      
     <select id="getAll" resultMap="menuItemDto">
-        select * from MenuItem where parent_id is null;
+        select * from MenuItem ;
     </select>
      
     <select id="getAllCount" resultType="java.lang.Long">

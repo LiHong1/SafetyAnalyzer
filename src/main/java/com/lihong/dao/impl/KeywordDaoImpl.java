@@ -1,5 +1,6 @@
 package com.lihong.dao.impl;
 import com.lihong.bean.Keyword;
+import com.lihong.common.daoImpl.BaseDaoImpl;
 import com.lihong.common.util.PinyinUtil;
 import com.lihong.dao.KeywordDao;
 /**

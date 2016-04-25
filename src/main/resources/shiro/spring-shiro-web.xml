@@ -50,7 +50,13 @@
 	             /main**=authc  
 	             /user/info**=authc  
 	             /admin/listUser**=authc,perms[admin:manage]
-	             /** = authc  
+	             /css/**  = anon
+	             /js/** = anon
+	             /img/** = anon
+	             /fonts/**  = anon  
+	             /font-awesome/**  = anon
+	             /register = anon
+	             /** = authc    
 	        </value>  
 	    </property>
 	</bean>  
@@ -68,4 +74,4 @@
 	    <property name="securityManager" ref="securityManager"/>  
 	  </bean>  
 	-->
-</beans>
+</beans>  

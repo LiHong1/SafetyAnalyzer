@@ -17,6 +17,7 @@ import com.lihong.service.KeywordService;
 public class InitKeywordServlet extends HttpServlet {
 	private KeywordService keywordService;
 	private NettyServer nettyServer;
+	public static final String CONTEXT_PATH = "basePath"; 
 	
 	public void init() throws ServletException {
 		Logger log = Logger.getLogger(InitKeywordServlet.class);  
@@ -34,7 +35,7 @@ public class InitKeywordServlet extends HttpServlet {
 		if (nettyServer == null){
 		    log.error("nettyServer start failure....");
 		}else{
-		   // nettyServer.start();
+		    nettyServer.start();
         }
 		
 		

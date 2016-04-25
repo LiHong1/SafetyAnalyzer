@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.CaseIndexDao">
+  
+    <resultMap type="CaseIndex" id="caseIndex">
+        <id column="caseId" property="caseId" jdbcType="INTEGER"/>
+        <result column="operate" property="operate" jdbcType="CHAR"/>  
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>   
+        <result column="updatedDate" property="updatedDate" jdbcType="TIMESTAMP"/>  
+    </resultMap>
+     
+    <select id="getAll" resultMap="caseIndex">
+        select * from caseIndex
+    </select>
+    
+     <select id="getCaseIndex" parameterType="java.lang.Long" resultMap="caseIndex">
+        <![CDATA[SELECT * FROM caseIndex
+			WHERE caseId=#{caseId,jdbcType=VARCHAR}
+		]]> 
+    </select>
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from caseIndex
+    </select>
+    
+     
+    <select id="getCountByParam" parameterType="com.lihong.dto.CaseIndexPageBeanDto" resultType="java.lang.Long">
+        select count(*) from caseIndex 
+        <where>  
+        <if test="operate!=null and operate!='' ">  
+            operate = #{operate, jdbcType=INTEGER}   
+        </if>  
+        </where>  
+    </select>
+    
+    <select id="getPageByParam" parameterType="com.lihong.dto.CaseIndexPageBeanDto" resultType="caseIndex">
+        select caseId,operate,title,createdDate,updatedDate from caseIndex 
+        <where>  
+        <if test="operate!=null and operate!='' ">  
+            operate = #{operate, jdbcType=INTEGER}   
+        </if>  
+        </where>   
+         order  by caseId desc limit  #{ beginPosition, jdbcType=INTEGER} ,#{endPosition, jdbcType=INTEGER}
+    </select>
+    
+    <select id="getById" parameterType="INTEGER" resultMap="caseIndex">
+        select * from caseIndex where caseId = #{caseId, jdbcType=INTEGER} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="Case" useGeneratedKeys="true">
+        <![CDATA[insert into caseIndex(caseId,title,operate,createdDate,updatedDate) values(#{caseId, jdbcType=INTEGER}, #{title, jdbcType=INTEGER}, #{operate, jdbcType=CHAR},#{type, jdbcType=INTEGER},#{createdDate, jdbcType=TIMESTAMP},#{updatedDate, jdbcType=TIMESTAMP});]]>
+    </insert>
+    
+     
+    <update id="update" parameterType="Case">
+        update cases
+        <set>
+            <if test="keywords != null">
+                keywords = #{keywords,jdbcType=VARCHAR},
+            </if>
+             
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+             <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+             <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id, jdbcType=INTEGER};
+    </update>
+     
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from cases where id = #{id, jdbcType=INTEGER};
+    </delete>
+    
+    <select id="getPage" parameterType="java.util.ArrayList" resultMap="caseIndex">
+        select id,createdDate,updatedDate from case_index    order by id desc limit 
+        <foreach item="item" index="index" collection="list"  separator=","> #{item} </foreach> ;
+    </select> 
+    
+ 
+    
+</mapper>

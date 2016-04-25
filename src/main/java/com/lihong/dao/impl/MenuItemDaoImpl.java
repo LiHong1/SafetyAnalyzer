@@ -2,6 +2,7 @@ package com.lihong.dao.impl;
 
 import java.util.List;
 
+import com.lihong.common.daoImpl.BaseDaoImpl;
 import com.lihong.dto.MenuItemDto;
 import com.lihong.dao.MenuItemDao;
 

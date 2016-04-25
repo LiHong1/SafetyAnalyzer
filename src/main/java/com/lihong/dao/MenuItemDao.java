@@ -2,6 +2,7 @@ package com.lihong.dao;
 
 import java.util.List;
 
+import com.lihong.common.dao.BaseDao;
 import com.lihong.dto.MenuItemDto;
 
 public interface MenuItemDao extends BaseDao<MenuItemDto>{

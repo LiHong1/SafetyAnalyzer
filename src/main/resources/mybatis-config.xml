@@ -7,6 +7,9 @@
         <typeAlias alias="Keyword" type="com.lihong.bean.Keyword"/>
         <typeAlias alias="MenuItem" type="com.lihong.bean.MenuItem"/>
         <typeAlias alias="Case" type="com.lihong.bean.Case"/>
+        <typeAlias alias="CaseIndex" type="com.lihong.bean.CaseIndex"/>
+        <typeAlias alias="Dictionary" type="com.lihong.bean.Dictionary"/>
+        <typeAlias alias="Message" type="com.lihong.bean.Message"/>
         <typeAlias alias="MenuItemDto" type="com.lihong.dto.MenuItemDto"/>
     </typeAliases>
      
@@ -30,6 +33,9 @@
         <mapper resource="sqlmap/User.xml"/>
         <mapper resource="sqlmap/MenuItem.xml"/>
         <mapper resource="sqlmap/Case.xml"/>
+        <mapper resource="sqlmap/CaseIndex.xml"/> 
         <mapper resource="sqlmap/Keyword.xml"/>
+        <mapper resource="sqlmap/Message.xml"/>
+        <mapper resource="sqlmap/Dictionary.xml"/>
     </mappers>
 </configuration>

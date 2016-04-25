@@ -320,6 +320,8 @@
                     dictRemoveFile: "Remove file",
                     dictRemoveFileConfirmation: null,
                     dictMaxFilesExceeded: "You can not upload any more files.",
+                    fileTypes:['.img','.jpeg','.xls','.pdf'],
+                    responseText:'',
                     accept: function(file, done) {
                         return done();
                     },
@@ -657,6 +659,7 @@
                 };
 
                 Dropzone.prototype.init = function() {
+               
                     var eventName, noPropagation, setupHiddenFileInput, _i, _len, _ref, _ref1;
                     if (this.element.tagName === "form") {
                         this.element.setAttribute("enctype", "multipart/form-data");
@@ -670,8 +673,10 @@
                                 if (_this.hiddenFileInput) {
                                     document.body.removeChild(_this.hiddenFileInput);
                                 }
+                                
                                 _this.hiddenFileInput = document.createElement("input");
                                 _this.hiddenFileInput.setAttribute("type", "file");
+                                //_this.hiddenFileInput.setAttribute("name", "file");
                                 if ((_this.options.maxFiles == null) || _this.options.maxFiles > 1) {
                                     _this.hiddenFileInput.setAttribute("multiple", "multiple");
                                 }
@@ -685,7 +690,7 @@
                                 _this.hiddenFileInput.style.left = "0";
                                 _this.hiddenFileInput.style.height = "0";
                                 _this.hiddenFileInput.style.width = "0";
-                                document.body.appendChild(_this.hiddenFileInput);
+                                _this.element.appendChild(_this.hiddenFileInput);
                                 return _this.hiddenFileInput.addEventListener("change", function() {
                                     var file, files, _i, _len;
                                     files = _this.hiddenFileInput.files;
@@ -1061,6 +1066,7 @@
                 };
 
                 Dropzone.prototype.accept = function(file, done) {
+                
                     if (file.size > this.options.maxFilesize * 1024 * 1024) {
                         return done(this.options.dictFileTooBig.replace("{{filesize}}", Math.round(file.size / 1024 / 10.24) / 100).replace("{{maxFilesize}}", this.options.maxFilesize));
                     } else if (!Dropzone.isValidFile(file, this.options.acceptedFiles)) {
@@ -1071,32 +1077,40 @@
                     } else {
                         return this.options.accept.call(this, file, done);
                     }
+            
                 };
 
                 Dropzone.prototype.addFile = function(file) {
-                    file.upload = {
-                        progress: 0,
-                        total: file.size,
-                        bytesSent: 0
-                    };
-                    this.files.push(file);
-                    file.status = Dropzone.ADDED;
-                    this.emit("addedfile", file);
-                    this._enqueueThumbnail(file);
-                    return this.accept(file, (function(_this) {
-                        return function(error) {
-                            if (error) {
-                                file.accepted = false;
-                                _this._errorProcessing([file], error);
-                            } else {
-                                file.accepted = true;
-                                if (_this.options.autoQueue) {
-                                    _this.enqueueFile(file);
-                                }
-                            }
-                            return _this._updateMaxFilesReachedClass();
-                        };
-                    })(this));
+                	var allSuffix = this.options.fileTypes.join(" ");
+                	var name = file.name;
+                	var suffix = name.substr(name.lastIndexOf("."));
+                	if (allSuffix.indexOf(suffix) >= 0){
+	                    file.upload = {
+	                        progress: 0,
+	                        total: file.size,
+	                        bytesSent: 0
+	                    };
+	                    this.files.push(file);
+	                    file.status = Dropzone.ADDED;
+	                    this.emit("addedfile", file);
+	                    this._enqueueThumbnail(file);
+	                    return this.accept(file, (function(_this) {
+	                        return function(error) {
+	                            if (error) {
+	                                file.accepted = false;
+	                                _this._errorProcessing([file], error);
+	                            } else {
+	                                file.accepted = true;
+	                                if (_this.options.autoQueue) {
+	                                    _this.enqueueFile(file);
+	                                }
+	                            }
+	                            return _this._updateMaxFilesReachedClass();
+	                        };
+	                    })(this));
+                	}else{
+                		alert("只能包含"+allSuffix+"后缀文件");
+                	}
                 };
 
                 Dropzone.prototype.enqueueFiles = function(files) {
@@ -1297,6 +1311,9 @@
                     if (this.options.autoProcessQueue) {
                         return this.processQueue();
                     }
+                    if (this.options.afterSuccess){  
+                    	this.options.afterSuccess.call();
+                    }
                 };
 
                 Dropzone.prototype.uploadFile = function(file) {
@@ -1463,6 +1480,10 @@
                     }
                     if (this.options.autoProcessQueue) {
                         return this.processQueue();
+                    }
+                    if (this.options.afterSuccess){
+                   
+                    	this.options.afterSuccess.call(this,responseText);
                     }
                 };
 

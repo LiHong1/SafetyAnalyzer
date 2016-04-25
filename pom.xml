@@ -2,18 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.cn</groupId>
-	<artifactId>ibaties</artifactId>
-	<packaging>war</packaging>
+	<artifactId>ibaties</artifactId>      
+	<packaging>war</packaging>  
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ibaties Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<mybatis.version>3.2.2</mybatis.version>
-		<mysql-connector-java.version>5.1.33</mysql-connector-java.version>
 		<mysql-connector.version>3.0.17</mysql-connector.version>
+		<mysql-connector-java.version>5.1.33</mysql-connector-java.version>
 		<dbunit.version>2.4.8</dbunit.version>
-		<log4j.version>1.2.16</log4j.version>
-		<slf4j-api.version>1.7.5</slf4j-api.version>
+		<log4j.version>1.2.16</log4j.version>     
+		<slf4j-api.version>1.7.5</slf4j-api.version>   
 		<spring.version>4.1.6.RELEASE</spring.version>
 		<freemarker.version>2.3.16</freemarker.version>
 		<servlet-api.version>3.0-alpha-1</servlet-api.version>
@@ -28,19 +28,10 @@
 		<quartz.version>2.2.2</quartz.version>
 		<shiro.version>1.2.4</shiro.version>
 	</properties>
-	<repositories>
-		<repository>
-			<id>sourceforge</id>
-			<url>http://oss.sonatype.org/content/groups/sourceforge/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<dependencies>
+	<repositories>   
+		
+	</repositories>    
+	<dependencies>  
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -48,7 +39,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
+		<dependency> 
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>
 			<version>${mybatis.version}</version>
@@ -58,13 +49,22 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>1.2.4</version>
 		</dependency>
-
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
+        </dependency>
 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector-java.version}</version>
-		</dependency>
-		<!-- MySql 连接jar -->
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aspects</artifactId>
+                <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+		<!-- MySql 连接jar -->  
 		<dependency>
 			<groupId>mysql-connector</groupId>
 			<artifactId>mysql-connector</artifactId>
@@ -116,6 +116,13 @@
 			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+      
+        
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
@@ -132,11 +139,6 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<groupId>ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-			<version>1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<version>${freemarker.version}</version>
@@ -148,7 +150,13 @@
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 			<version>7.0</version>
-			<scope>provider</scope>
+			<scope>provided</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>javax.validation</groupId>
+		    <artifactId>validation-api</artifactId>
+		    <version>1.1.0.Final</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -204,8 +212,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson.version}</version>
+			<artifactId>jackson-annotations</artifactId>  
+			<version>${jackson.version}</version>       
 		</dependency>
 		<dependency>
 			<groupId>io.netty</groupId>
@@ -235,8 +243,57 @@
 		    <artifactId>shiro-spring</artifactId>
 		    <version>${shiro.version}</version>
 		</dependency>
-		<!-- <dependency> <groupId>com.belerweb</groupId> <artifactId>pinyin4j</artifactId> 
-			<version>2.5.1</version> </dependency> -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-validator</artifactId>
+		    <version>5.2.4.Final</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.sourceforge.jexcelapi</groupId>
+		    <artifactId>jxl</artifactId>
+		    <version>2.6.12</version>
+		</dependency>
+		
+		<dependency> 
+			<groupId>com.belerweb</groupId> 
+			<artifactId>pinyin4j</artifactId> 
+		    <version>2.5.1</version>
+		 </dependency> 
+			
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>  
+		    <version>2.4.1</version>
+		    <type>jar</type>
+		</dependency>        
+		<dependency>  
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-redis</artifactId>
+		    <version>1.3.4.RELEASE</version>
+		</dependency>
+		
+		  <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>2.6.11</version>
+        </dependency>
+        
+        <dependency>
+		    <groupId>joda-time</groupId>
+		    <artifactId>joda-time</artifactId>
+		    <version>2.3</version>
+		</dependency>
+  <!--       <dependency> 
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-web</artifactId>
+            <version>2.0.4</version>
+        </dependency> -->
+			
 	</dependencies>
 	<build>
 		<finalName>ibatis</finalName>

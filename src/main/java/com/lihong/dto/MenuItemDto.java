@@ -1,10 +1,13 @@
 package com.lihong.dto;
+
+import com.lihong.bean.DomainObject;
+
 /**
  * 菜单类
  * @author lihong2-ext
  *
  */
-public class MenuItemDto {
+public class MenuItemDto extends DomainObject{
     //ID
 	private Integer id;
 	//菜单名称
@@ -14,7 +17,7 @@ public class MenuItemDto {
 	//菜单类型
 	private Integer type;
 	//父级菜单
-	private Integer pId;
+	private Long pId;
 	//图标
 	private String inco;
 	//是否显示
@@ -31,7 +34,7 @@ public class MenuItemDto {
 	
 	
 	
-	public MenuItemDto(Integer id,String name, String url, Integer pId, Boolean visiable) {
+	public MenuItemDto(Integer id,String name, String url, Long pId, Boolean visiable) {
 		super();
 		this.name = name;
 		this.url = url;
@@ -55,10 +58,10 @@ public class MenuItemDto {
 	public void setType(Integer type) {
 		this.type = type;
 	}
-	public Integer getPId() {
+	public Long getPId() {
 		return pId;
 	}
-	public void setPId(Integer pId) {
+	public void setPId(Long pId) {
 		this.pId = pId;
 	}
 	public String getInco() {
@@ -104,15 +107,7 @@ public class MenuItemDto {
 
 
 
-	public Integer getId() {
-		return id;
-	}
 
-
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 	
 	
  

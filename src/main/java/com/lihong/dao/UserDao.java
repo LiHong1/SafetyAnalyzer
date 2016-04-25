@@ -1,6 +1,9 @@
 package com.lihong.dao;
 
 import com.lihong.bean.User;
+import com.lihong.common.bean.PageBean;
+import com.lihong.common.dao.BaseDao;
+import com.lihong.dto.UserPageBeanDto;
 
 public interface UserDao extends BaseDao<User>{
     /**
@@ -10,5 +13,5 @@ public interface UserDao extends BaseDao<User>{
      */
 	User getUser(String username);
 
-
+	PageBean<User> getPage(Integer page, Integer rows, UserPageBeanDto userPageBeanDto);
 }

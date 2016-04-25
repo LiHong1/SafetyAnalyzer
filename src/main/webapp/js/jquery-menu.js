@@ -1,9 +1,9 @@
 (function($){
-		
+	    var basePath = $("#basePath").html();
 		$.ajax({
 	        type: "get",
 	        dataType: "html",
-	        url: '/menus',
+	        url: basePath+'/menus',
 	        success: function (data) {
 	        	  $.fn.getSiblingMenu(window.location.pathname);
 	            if (data != "") {
@@ -36,11 +36,11 @@
 			$.ajax({
 		        type: "get",
 		        dataType: "json",
-		        url: '/menus/'+parentId,
+		        url: basePath+'/menus/'+parentId,
 		        success: function (data) {
 		        	var menuChild = "<ul class='nav nav-second-level collapse in'>";
 			        	for(var i = 0 ;i<data.length;i++){
-			        		menuChild += "<li><a href="+data[i].url+">"+data[i].name+"</a></li>";
+			        		menuChild += "<li><a href="+basePath+data[i].url+">"+data[i].name+"</a></li>";
 			        	}
 			        	menuChild += "</ul>";
 			        	obj.append(menuChild);
@@ -53,13 +53,13 @@
 			$.ajax({
 		        type: "post",
 		        dataType: "json",
-		        url: '/siblingMenus',
+		        url: basePath+'/siblingMenus',
 		        data:{'url':url},
 		        success: function (data) {
 		        	if (data != ''){
 		        		var menuChild = "<ul class='nav nav-second-level collapse in'>";
 			        	for(var i = 0 ;i<data.length;i++){
-			        		menuChild += "<li><a href="+data[i].url+">"+data[i].name+"</a></li>";
+			        		menuChild += "<li><a href="+basePath+data[i].url+">"+data[i].name+"</a></li>";
 			        	}
 			            var lis = $("#side-menu").children();
 			            for(var i = 1 ; i < lis.length ; i++){

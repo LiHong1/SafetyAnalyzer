@@ -1,0 +1,48 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd 
+		http://www.springframework.org/schema/mvc 
+		http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd 
+		http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context-4.1.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-4.1.xsd 
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-4.1.xsd ">
+
+
+	<!-- 更新案例索引的定时任务  -->
+	<bean id="updateCaseIndexJob" class="com.lihong.web.service.quartz.UpdateCaseIndexJob">
+	    <property name="caseService" ref="caseService"></property>
+	</bean>  
+	
+	<bean id="updateCaseIndexJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   
+        <property name="targetObject" ref="updateCaseIndexJob"/>  
+        <property name="targetMethod" value="execute"/>  
+        <property name="concurrent" value="false"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+    </bean>
+	
+	<!-- 定时任务  -->
+	<bean id="updateCaseIndexTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="updateCaseIndexJobDetail"/>  
+          <property name="cronExpression" value="0 0 12 * * ?"/><!-- 每天零点触发一次 --> 
+       <!-- <property name="cronExpression" value="*/59 * * * * ?"/> --><!-- 每隔60秒钟触发一次 -->  
+    </bean> 
+      
+   
+
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	       <property name="triggers">  
+	           <list>  
+	              <ref bean="updateCaseIndexTrigger"/>  
+	           </list>  
+	       </property>  
+	       <property name="autoStartup" value="true"/>  
+	</bean>  
+
+	
+</beans>

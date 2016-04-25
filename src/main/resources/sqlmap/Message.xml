@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lihong.dao.MessageDao">
+  
+    <resultMap type="Message" id="message">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="userPhone" property="userPhone" jdbcType="VARCHAR"/>  
+        <result column="strangePhone" property="strangePhone" jdbcType="VARCHAR"/>   
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="dangerousKeywords" property="dangerousKeywords" jdbcType="VARCHAR"/> 
+        <result column="type" property="type" jdbcType="INTEGER"/>
+        <result column="createdDate" property="createdDate" jdbcType="TIMESTAMP"/>   
+    </resultMap>
+
+     
+    <select id="getAll" resultMap="message">
+        select * from message
+    </select>    
+    
+
+     
+    <select id="getAllCount" resultType="java.lang.Long">
+        select count(*) from message
+    </select>
+    
+     
+    <select id="getCountByParam" parameterType="com.lihong.dto.MessageDto" resultType="java.lang.Long">
+        select count(*) from message 
+        <where>  
+        <if test="userId!='' ">  
+            userId = #{userId, jdbcType=INTEGER}   
+        </if>  
+        <if test="type!= null and type!= '' ">  
+            and type = #{type, jdbcType=VARCHAR}     
+        </if>  
+         
+        </where>  
+    </select>
+    
+    <select id="getMessageByParam" parameterType="com.lihong.dto.MessageDto" resultType="message">
+        select id,userPhone,strangePhone,content,dangerousKeywords,type,createdDate from message 
+        <where>  
+        <if test="userId!='' ">  
+            userId = #{userId, jdbcType=INTEGER}   
+        </if>  
+        <if test="type!= null and type!= '' ">  
+            and type = #{type, jdbcType=VARCHAR}     
+        </if>  
+        </where> 
+           order by id desc limit #{ beginPosition, jdbcType=INTEGER} ,#{endPosition, jdbcType=INTEGER}
+    </select>
+    
+    <select id="getById" parameterType="INTEGER" resultMap="message">
+        select * from message where id = #{id, jdbcType=INTEGER} limit 0, 1;
+    </select>
+     
+    <!-- useGeneratedKeys="true" keyProperty="id" 将生成的主键 值返回 -->
+    <insert id="add" parameterType="Message" useGeneratedKeys="true" keyProperty="id">
+        <![CDATA[insert into message(userId,caseId,userPhone,strangePhone,dangerousKeywords,type,content,createdDate) 
+                              values(
+                                     #{u.id, jdbcType=INTEGER},
+                                     #{c.id, jdbcType=INTEGER},
+                                     #{userPhone, jdbcType=VARCHAR},
+                                     #{strangePhone, jdbcType=VARCHAR},
+                                     #{dangerousKeywords, jdbcType=VARCHAR},
+                                     #{type, jdbcType=INTEGER},
+                                     #{content, jdbcType=TIMESTAMP},
+                                     #{createdDate, jdbcType=TIMESTAMP});
+         ]]>
+    </insert>
+    
+   
+     
+    <delete id="delete" parameterType="java.lang.Long">
+        delete from message where id = #{id, jdbcType=INTEGER};
+    </delete>
+    
+
+</mapper>
